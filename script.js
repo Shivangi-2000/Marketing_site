@@ -41,3 +41,36 @@ document
   .addEventListener('click', function () {
     message.remove();
   });
+
+// scroll
+
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+
+btnScrollTo.addEventListener('click', function (e) {
+  const s1coords = section1.getBoundingClientRect();
+
+  /* old ways to scroll
+  window.scrollTo(
+    s1coords.left + window.pageXOffset,
+    s1coords.top + window.pageYOffset
+  );
+  ---------
+  window.scrollTo({
+    left: s1coords.left + window.pageXOffset,
+    top: s1coords.top + window.pageYOffset,
+    behavior: 'smooth',
+  }); */
+  section1.scrollIntoView({ behavior: 'smooth' });
+});
+
+const randomInt = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1) + min);
+const randomColor = () =>
+  `rgb(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)})`;
+
+document.querySelector('.nav__link').addEventListener('click', function (e) {});
+document
+  .querySelector('.nav__links')
+  .addEventListener('click', function (e) {});
+document.querySelector('.nav').addEventListener('click', function (e) {});
