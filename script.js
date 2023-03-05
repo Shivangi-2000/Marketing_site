@@ -42,7 +42,7 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
-message.classList.add('cookie-message');
+/* message.classList.add('cookie-message');
 
 message.innerHTML = `Accept the cookie! <button class="btn btn--close-cookie">Accept</button>`;
 header.append(message);
@@ -51,7 +51,7 @@ document
   .querySelector('.btn--close-cookie')
   .addEventListener('click', function () {
     message.remove();
-  });
+  }); */
 
 // scroll
 
@@ -210,17 +210,73 @@ imgTargets.forEach(img => imgObserver.observe(img));
 const slides = document.querySelectorAll('.slide');
 const btnLeft = document.querySelector('.slider__btn--left');
 const btnRight = document.querySelector('.slider__btn--right');
+const dotContainer = document.querySelector('.dots');
 
 let curSlide = 0;
 
 const maxSlide = slides.length;
-
-btnRight.addEventListener('click', function () {
-  curSlide++;
+const goToNextSlide = function (slide) {
   slides.forEach(
-    (s, i) => (s.style.transform = `translateX(${100 * (i - curSlide)}%)`)
+    (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
   );
+};
+goToNextSlide(0);
+
+const nextSlide = function () {
+  if (curSlide === maxSlide - 1) {
+    curSlide = 0;
+  } else curSlide++;
+  goToNextSlide(curSlide);
+  activatdots(curSlide);
+};
+
+const preSlide = function () {
+  if (curSlide === 0) {
+    curSlide = maxSlide - 1;
+  } else curSlide--;
+  goToNextSlide(curSlide);
+  activatdots(curSlide);
+};
+
+btnRight.addEventListener('click', nextSlide);
+btnLeft.addEventListener('click', preSlide);
+
+// key events
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'ArrowLeft') preSlide();
+  if (e.key === 'ArrowRight') nextSlide();
 });
+
+//create dots...
+
+const activatdots = function (slide) {
+  document
+    .querySelectorAll('.dots__dot')
+    .forEach(dot => dot.classList.remove('dots__dot--active'));
+
+  document
+    .querySelector(`.dots__dot[data-slide="${slide}"]`)
+    .classList.add(`dots__dot--active`);
+};
+
+const createDots = function () {
+  slides.forEach(function (_, i) {
+    dotContainer.insertAdjacentHTML(
+      'beforeend',
+      `<button class="dots__dot" data-slide = "${i}"></button>`
+    );
+  });
+};
+
+createDots();
+dotContainer.addEventListener('click', function (e) {
+  if (e.target.classList.contains('dots__dot')) {
+    const { slide } = e.target.dataset;
+    goToNextSlide(slide);
+    activatdots(slide);
+  }
+});
+
 // document
 //   .querySelector('.nav__links')
 //   .addEventListener('click', function (e) {});
